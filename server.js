@@ -13,21 +13,21 @@ let target_url = `https://api.instagram.com/v1/users/${CLIENT_ID}/media/recent/?
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/api/instafeed', (req, res)=>{
-  getPhotos(target_url);
+  getPhotos(target_url, res);
 });
 
-function getPhotos(target_url){
-  https.get(target_url, (res) =>{
-    res.setEncoding('utf8');
+function getPhotos(target_url, res){
+  https.get(target_url, (data) =>{
     let body = '';
-    res.on('data', (chunk) => {
-      body += chunk;
-    });
-    res.on('end', () => {
-      let json = JSON.parse(body);
-      console.log(json);
-    });
-
+    if(data.statusCode === 200){
+      data.on('data', (chunk) => {
+        body += chunk;
+      });
+      data.on('end', () => {
+        let json = JSON.parse(body);
+        res.send(json);
+      });
+    }
   });
 }
 
