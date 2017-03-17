@@ -217,7 +217,14 @@ module.exports = function makeWebpackConfig() {
    */
   config.devServer = {
     contentBase: './src/public',
-    stats: 'minimal'
+    stats: 'minimal',
+    port: 8080,
+    proxy: {
+      '/api/instafeed': {
+        target: 'http://localhost:9000',
+        secure: false
+      }
+    }
   };
 
   return config;
